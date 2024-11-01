@@ -1,0 +1,114 @@
+.full_width_form {
+    width: 100%; /* Garante que o formulário use toda a largura da página */
+ 
+    margin: 0 auto; /* Centraliza o formulário */
+    padding: 10px; /* Aumenta o espaçamento interno */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Adiciona uma leve sombra ao formulário */
+    height: 100%;
+}
+
+.o_half_width_group {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin-bottom: 30px; /* Aumenta o espaçamento entre os grupos */
+}
+
+.o_half_width_group > .form_field {
+    width: 100%; /* Garante que cada campo ocupe a largura total em dispositivos menores */
+    margin-bottom: 20px; /* Espaçamento extra entre os campos */
+}
+
+.form_field {
+    display: flex;
+    flex-direction: column; /* Move o label para cima do input */
+    width: 170%;
+    padding-bottom: 5%;
+}
+
+.form_field label {
+    margin-bottom: 8px; /* Aumenta o espaçamento entre o label e o input */
+    font-size: 16px; /* Aumenta o tamanho da fonte do label */
+    font-weight: bold;
+    color: #333;
+    text-align: left; /* Alinha o label à esquerda */
+}
+
+.field-above-label input, .field-above-label .o_field_widget {
+    width: 100%;
+    padding: 15px; /* Aumenta o tamanho do input */
+    font-size: 16px; /* Aumenta o tamanho da fonte do input */
+    border-radius: 10px; /* Torna as bordas mais arredondadas */
+    border: 1px solid #ccc;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1); /* Sombras leves nos inputs */
+}
+.field-above-label input{
+    padding-left: 5% !important;
+}
+#cpf{
+    padding-left: 3% !important;
+}
+footer .btn-primary {
+    width: 200px; /* Aumenta a largura do botão */
+    padding: 10px;
+    font-size: 16px; /* Aumenta o tamanho da fonte no botão */
+    margin: 0 auto; /* Centraliza o botão */
+    display: block;
+}
+
+.o_form_sheet{
+    width: 73.82%;
+    height: 69.53%;
+    border-radius: 16px;
+    border-width: 2px;
+    position: absolute;
+}
+
+.o_input{
+    padding-left: 30%;
+}
+
+.o_group{
+    margin-left: 3%;
+}
+
+.border-bottom {
+    border-bottom: 0px solid #dee2e6 !important;
+    padding-bottom: 5%;
+    margin-top: 3%;
+    margin-left: 3%;
+    
+}
+
+
+.o_form_view .o_form_sheet_bg > .o_form_sheet {
+     max-width: 55vw !important; 
+}
+
+.o_form_label{
+    font-weight: bold !important;
+}
+
+.o_form_view .o_group .o_form_label {
+    margin-bottom: 2%;
+}
+.form_field_bottom label {
+    margin-bottom: 1% !important;
+}
+
+.o_form_view .o_inner_group {
+    --columns: 1;
+    gap: 0.2rem 16px;
+    margin-bottom: 0.2rem;
+}
+
+#gender{
+    width: 100%;
+    font-size: 16px; /* Aumenta o tamanho da fonte do input */
+    border-radius: 10px; /* Torna as bordas mais arredondadas */
+    border: 1px solid #ccc;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1); /* Sombras leves nos inputs */
+    padding-left: 3% !important;
+    
+}
+

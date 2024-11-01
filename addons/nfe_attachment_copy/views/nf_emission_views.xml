@@ -1,0 +1,164 @@
+<odoo>
+
+
+
+    <!-- View da tabela com todas as Notas Fiscais e opção de criar -->
+    <record id="view_nf_emission_tree" model="ir.ui.view">
+        <field name="name">nf.emission.tree</field>
+        <field name="model">nf.emission</field>
+        <field name="arch" type="xml">
+            <div class="pagina">
+            <tree string="Notas Fiscais">
+                <field name="user_id"/>
+                <field name="description"/>
+                <field name = "valor_nf"/>
+                <field name = "mes_ref"/>
+                <field name="state"/>
+            </tree>
+        </div>
+        </field>
+    </record>
+
+    <!-- Formulário de criação de Nota Fiscal -->
+    <record id="view_nf_emission_form_create" model="ir.ui.view">
+        <field name="name">nf.emission.form.create</field>
+        <field name="model">nf.emission</field>
+        <field name="arch" type="xml">
+            <form string="Criar Nota Fiscal">
+                <sheet>
+                    <group>
+                        <field name="user_id"/>
+                        <field name="description"/>
+                        <field name = "valor_nf" string = "Valor da nota fiscal"/>
+                        <field name = "mes_ref" string = "Mês de rederência"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Ação para a primeira tela: Listar e Criar Notas -->
+    <record id="action_nf_emission_create" model="ir.actions.act_window">
+        <field name="name">Notas Fiscais (Listar e Criar)</field>
+        <field name="res_model">nf.emission</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('view_nf_emission_tree')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('view_nf_emission_form_create')})]"/>
+        <field name="help" type="html">
+            <p>Veja e crie novas Notas Fiscais.</p>
+        </field>
+    </record>
+
+<!-- ##################################################################################################### -->
+
+
+
+<!-- Tree view para listar as Notas Fiscais -->
+
+<record id="view_nf_emission_tree2" model="ir.ui.view">
+    <field name="name">nf.emission.tree2</field>
+    <field name="model">nf.emission</field>
+    <field name="arch" type="xml">
+        <!-- Configurações para impedir edição e criação -->
+        <div class="pagina">
+
+         
+        <tree string="Notas Fiscais" create="false" edit = "false">
+            <field name="user_id"/>
+            <field name="description" string="Descrição" />
+            <field name="valor_nf"/>
+            <field name="mes_ref"/>
+            <field name="state"/>
+            <!-- Botão para acionar a função Python sem edição -->
+<!-- Botão para quando o state é 'draft' -->
+<button name="action_trigger_popup" string="Anexar nota fiscal" type="object"
+    class="btn-primary"
+    attrs="{'invisible': [('state', '!=', 'draft')]}"/>
+
+<!-- Botão para quando o state é diferente de 'draft' -->
+<button name="action_trigger_popup" string="Nota fiscal já enviada" type="object"
+    class="btn-danger"
+    attrs="{'invisible': [('state', '=', 'draft')]}"/>
+        </tree>
+    </div>
+    </field>
+</record>
+<!-- Form view para editar um registro e anexar PDF -->
+<record id="view_nf_emission_form_attach_pdf" model="ir.ui.view">
+    <field name="name">nf.emission.form.attach.pdf</field>
+    <field name="model">nf.emission</field>
+    <field name="arch" type="xml">
+        <form string="Anexar PDF à Nota Fiscal">
+            <sheet>
+                <group>
+                    <group>
+
+                        <field name="user_id" string="Usuário" readonly="1"/>
+                        <field name="description" string="Descrição" readonly="1"/>
+                        <field name = "valor_nf" readonly = "1"/>
+                        <field name = "mes_ref" readonly = "1"/>                        
+                        <field name="state" string="Estado"/>
+                    </group>
+                    <group>
+                        <!-- Campo para anexar o PDF -->
+
+                        <field name="nf_file" widget="binary" string="Anexar PDF" filename="nf_filename"/>
+                        <field name="nf_filename" readonly="1" invisible = "1"/>
+
+                    </group>
+                </group>
+            </sheet>
+            <!-- Botões para salvar o PDF ou cancelar -->
+            <footer>
+                <button string="Salvar" type="object" name="action_save_pdf" class="btn-primary"/>
+                <button string="Cancelar" class="btn-secondary" special="cancel"/>
+            </footer>
+        </form>
+    </field>
+</record>
+
+<!-- Ação para editar registro no pop-up -->
+<record id="action_nf_emission_form_popup" model="ir.actions.act_window">
+    <field name="name">Editar Nota Fiscal</field>
+    <field name="res_model">nf.emission</field>
+    <field name="view_mode">form</field>
+    <field name="view_id" ref="view_nf_emission_form_attach_pdf"/>
+    <field name="target">new</field> <!-- Abre o formulário no pop-up -->
+</record>
+
+    <!-- Ação para listar Notas Fiscais -->
+<record id="action_nf_emission_list" model="ir.actions.act_window">
+    <field name="name">Notas Fiscais (Listar e Anexar PDF)</field>
+    <field name="res_model">nf.emission</field>
+    <field name="view_mode">tree</field><!-- Apenas a tree view será exibida aqui -->
+    <field name="domain">[('user_id', '=', uid)]</field> 
+    <field name="view_id" ref="view_nf_emission_tree2"/>
+    <field name="help" type="html">
+        <p>Veja e crie novas Notas Fiscais.</p>
+    </field>
+</record>
+
+<record id="view_nf_emission_warning_form" model="ir.ui.view">
+    <field name="name">nf.emission.warning.form</field>
+    <field name="model">nf.emission</field>
+    <field name="arch" type="xml">
+        <form string="Aviso">
+            <sheet>
+                <div class="alert alert-warning" role="alert">
+                    <h4>Aviso!</h4>
+                    <p>Você já emitiu essa Nota Fiscal.</p>
+                </div>
+            </sheet>
+            <footer>
+                <!-- Botão OK para fechar o pop-up -->
+                <button string="OK" class="btn-primary" special="cancel"/>
+            </footer>
+        </form>
+    </field>
+</record>
+    <!-- Menu -->
+    <menuitem id="menu_nf_emission_root" name="Notas Fiscais" sequence="10"/>
+    <menuitem id="menu_nf_emission_create" name="Criar e Listar Notas Fiscais" parent="menu_nf_emission_root" action="action_nf_emission_create" sequence="20"/>
+    <menuitem id="menu_nf_emission_issue" name="Emitir Nota Fiscal (Anexar PDF)" parent="menu_nf_emission_root" action="action_nf_emission_list" sequence="30"/>
+</odoo>

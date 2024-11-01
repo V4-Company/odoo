@@ -1,0 +1,16 @@
+.btn {
+    min-width: 180px; /* Define uma largura mínima */
+    text-align: center; /* Centraliza o texto */
+}
+
+.btn a, .btn button {
+    width: 100%; /* Garante que o botão ocupe toda a célula */
+    padding: 10px; /* Ajusta o espaçamento interno para consistência */
+}
+.container{
+    max-width: 95%;
+}
+
+.description-column{
+    width: fit-content;
+}

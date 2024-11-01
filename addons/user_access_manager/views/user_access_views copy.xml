@@ -1,0 +1,112 @@
+<odoo>
+
+
+ <!-- View da tabela com todas as Notas Fiscais e opção de criar -->
+    <record id="view_users_tree" model="ir.ui.view">
+        <field name="name">user.acess.tree</field>
+        <field name="model">res.users</field>
+        <field name="arch" type="xml">
+            <tree string="Usuários">
+        <field name="name"/>
+        <field name="login"/>
+        <field name="password"/>
+        <field name="job_title"/>
+        <field name="groups_id"/>
+        <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+ 
+
+
+
+<!-- ################################################################################################################ -->
+ <!-- pagina 1 -->
+ <record id="view_step_1" model="ir.ui.view">
+    <field name="name">form.step.1</field>
+    <field name="model">res.users</field>
+    <field name="arch" type="xml">
+        <form string="Contratar - Informações Pessoais">
+            <sheet>
+                <group>
+                    <group>
+                        <field name="name" placeholder="Cristina Maria"/>
+                        <field name="last_name" placeholder="Campos"/>
+                    </group>
+                    <group>
+                        <field name="start_date" placeholder="dd/mm/aaaa"/>
+                        <field name="birth_date" placeholder="13/06/2002"/>
+                    </group>
+                    <group>
+                        <field name="cpf" placeholder="303.985.170-53"/>
+                        <field name="gender" widget="selection"/>
+                    </group>
+                </group>
+            </sheet>
+
+                <button string="Avançar" type="object" class="btn-primary" name="action_next_step" icon="fa-arrow-right"/>
+
+        </form>
+    </field>
+</record>
+
+   <!-- Ação para a primeira tela: Listar e Criar Notas -->
+    <record id="action_user_acess" model="ir.actions.act_window">
+        <field name="name">Usuários (criar e editar)</field>
+        <field name="res_model">res.users</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('view_users_tree')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('view_step_1')})]"/>
+        <field name="help" type="html">
+            <p>Veja e crie novas Notas Fiscais.</p>
+        </field>
+    </record>
+    
+<!-- 2 pagina -->
+<record id="view_step_2" model="ir.ui.view">
+    <field name="name">form.step.2</field>
+    <field name="model">res.users</field>
+    <field name="arch" type="xml">
+        <form string="Contratar - Informações de Contato">
+            <sheet>
+                <group>
+                    <div>
+                        <field name="email_pessoal" placeholder="Email pessoal do investidor"/>
+                        <field name="telefone" placeholder="Telefone/WhatsApp do investidor"/>
+                    </div>
+                    <div>
+                        <field name="cep" placeholder="CEP do Investidor"/>
+                        <field name="email_corp" placeholder="Ex: nome.sobrenome@v4company.com"/>
+                    </div>
+                </group>
+            </sheet>
+            <footer>
+                <button string="Voltar" type="object" class="btn-secondary" name="action_previous_step" icon="fa-arrow-left"/>
+                <button string="Salvar" type="object" class="btn-primary" name="action_save" icon="fa-check"/>
+            </footer>
+        </form>
+    </field>
+</record>
+
+    <!-- Ação para abrir o formulário -->
+    <record id="action_user_access_form" model="ir.actions.act_window">
+        <field name="name">Criar Usuário</field>
+        <field name="res_model">res.users</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_step_1"/>
+        <field name="target">new</field>
+    </record>
+
+
+
+    <!-- Menu para o gerenciamento de acessos -->
+    <menuitem id="menu_user_access_root" name="Gestão de Usuários" sequence="10"/>
+
+    <!-- Submenu para criar usuários -->
+    <menuitem id="menu_create_user" parent="menu_user_access_root" name="Criar Usuário" action="action_user_acess" sequence="10"/>
+
+
+
+</odoo>

@@ -1,0 +1,7 @@
+<!-- <odoo>
+    <template id="custom_sidebar_layout" inherit_id="web.layout">
+        <xpath expr="//nav[@id='oe_main_menu_navbar']" position="attributes">
+            <attribute name="class">o_sidebar_navbar</attribute>
+        </xpath>
+    </template>
+</odoo> -->

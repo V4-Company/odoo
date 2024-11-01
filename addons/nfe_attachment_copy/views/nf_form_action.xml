@@ -1,0 +1,16 @@
+<odoo>
+    <record id="website_form_nf_emission_action" model="ir.actions.server">
+        <field name="name">NF Emission</field>
+        <field name="model_id" ref="model_nf_emission"/>
+        <field name="state">code</field>
+        <field name="code">
+            action = request.env['nf.emission'].sudo().create({
+                'user_id': request.env.user.id,
+                'description': post.get('description'),
+                'valor_nf': float(post.get('valor_nf', 0)),
+                'mes_ref': post.get('mes_ref'),
+                'state': 'draft',
+            })
+        </field>
+    </record>
+</odoo>

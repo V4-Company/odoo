@@ -1,0 +1,30 @@
+.o_sidebar {
+    height: 100%;
+    width: 250px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #111;
+    padding-top: 20px;
+    z-index: 1000;
+}
+
+.o_sidebar .nav {
+    list-style-type: none;
+    padding: 0;
+}
+
+.o_sidebar .nav-item {
+    padding: 10px 15px;
+    text-align: left;
+}
+
+.o_sidebar .nav-item a {
+    color: white;
+    text-decoration: none;
+    display: block;
+}
+
+.o_sidebar .nav-item a:hover {
+    background-color: #575757;
+}

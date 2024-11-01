@@ -123,7 +123,7 @@ class OAuthController(http.Controller):
     @fragment_to_query_string
     def signin(self, **kw):
         state = json.loads(kw['state'])
-
+        print("trigou função sigin 222222")
         # make sure request.session.db and state['d'] are the same,
         # update the session and retry the request otherwise
         dbname = state['d']

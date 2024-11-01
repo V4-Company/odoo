@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Sobrescrevendo o template do cabeçalho do website ou backend -->
+    <template id="custom_sidebar_template" inherit_id="website.template_header_default" name="Custom Sidebar Template" active="True">
+        <!-- Substituir a navbar por uma sidebar -->
+        <xpath expr="//t[@t-call='website.navbar']" position="replace">
+            <!-- Estrutura básica da sidebar -->
+            <div class="o_sidebar">
+                <ul class="nav flex-column">
+                    <li class="nav-item divider" t-if="not user_id._is_public()"/>
+                    
+                    <!-- Exibe nome do usuário logado se estiver autenticado -->
+                    <li class="nav-item dropdown" t-if="not user_id._is_public()">
+                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
+                            <b>
+                                <span t-esc="user_id.name[:23] + '...' if user_id.name and len(user_id.name) &gt; 25 else user_id.name"/>
+                            </b>
+                        </a>
+                        <div class="dropdown-menu js_usermenu" role="menu">
+                            <a id="o_logout" class="dropdown-item" t-attf-href="/web/session/logout?redirect=/" role="menuitem">Logout</a>
+                        </div>
+                    </li>
+                    
+                    <!-- Menu fixo para visitantes -->
+                    <li class="nav-item" t-if="user_id._is_public()">
+                        <a class="nav-link" href="/web/login">Login</a>
+                    </li>
+
+                    <!-- Menu de navegação -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="/web">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/mail">Messages</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/contacts">Contacts</a>
+                    </li>
+                    <!-- Adicione outros menus conforme necessário -->
+                </ul>
+            </div>
+        </xpath>
+    </template>
+</odoo>

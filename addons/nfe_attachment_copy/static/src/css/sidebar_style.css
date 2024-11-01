@@ -1,0 +1,26 @@
+.o_sidebar_navbar {
+    position: fixed;
+    width: 250px; /* Largura do sidebar */
+    height: 100%; /* Altura completa */
+    top: 0;
+    left: 0;
+    background-color: #2c3e50; /* Cor de fundo do sidebar */
+    padding-top: 20px;
+    overflow-x: hidden; /* Para evitar scroll horizontal */
+}
+
+.o_sidebar_navbar a {
+    padding: 10px 15px;
+    text-decoration: none;
+    font-size: 18px;
+    color: white;
+    display: block;
+}
+
+.o_sidebar_navbar a:hover {
+    background-color: #1abc9c;
+}
+
+.o_main_content {
+    margin-left: 260px; /* Para afastar o conteúdo principal da sidebar */
+}

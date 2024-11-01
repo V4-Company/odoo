@@ -1,0 +1,165 @@
+<odoo>
+
+
+    <!-- View da tabela com todas as Notas Fiscais e opção de criar -->
+    <record id="view_users_tree" model="ir.ui.view">
+        <field name="name">user.acess.tree</field>
+        <field name="model">res.users</field>
+        <field name="arch" type="xml">
+            <tree string="Usuários">
+                <field name="name"/>
+                <field name="login"/>
+                <field name="password"/>
+                <field name="job_title"/>
+                <field name="groups_id"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+
+
+
+
+    <!-- ################################################################################################################ -->
+    <!-- pagina 1 -->
+    <record id="view_step_1" model="ir.ui.view">
+        <field name="name">form.step.1</field>
+        <field name="model">res.users</field>
+        <field name="arch" type="xml">
+            <form string="Contratar - Informações Pessoais" class="full_width_form">
+                <sheet class="full_width_form">
+                    <notebook>
+                        <page string="contratar">
+                            <header>
+                                <h1 style="font-size: 28px;">Contratar</h1>
+                            </header>
+                            <group class="pagina">
+                                <group class="o_half_width_group">
+                                    <div class="form_field">
+                                        <label for="name" string="Nome"/>
+                                        <field name="name" string="Nome" placeholder="Elisa Maria" class="field-above-label"/>
+                                    </div>
+                                    <div class="form_field">
+                                        <label for="last_name" string="Sobrenome"/>
+                                        <field name="last_name" string="Sobrenome Completo" placeholder="Campos" class="field-above-label"/>
+                                    </div>
+                                </group>
+                                <group class="o_half_width_group">
+                                    <div class="form_field">
+                                        <label for="start_date" string="Data de início"/>
+                                        <field name="start_date" string="Data de início na unidade" placeholder="dd/mm/aaaa" class="field-above-label"/>
+                                    </div>
+                                    <div class="form_field">
+                                        <label for="birth_date" string="Data de Nascimento"/>
+                                        <field name="birth_date" string="Data de Nascimento" placeholder="13/06/2002" class="field-above-label"/>
+                                    </div>
+                                </group>
+                                <group class="o_half_width_group" style="width: 100%;">
+                                    <div class="form_field form_field_bottom">
+                                        <label for="cpf" string="CPF"/>
+                                        <field name="cpf" string="CPF" placeholder="303.985.170-53" class="field-above-label" style="width: 109%;"/>
+                                    </div>
+                                    <div class="form_field form_field_bottom">
+                                        <label for="gender" string="Gênero"/>
+                                        <field name="gender" string="Gênero" widget="selection" placeholder="Selecione o gênero" class="field-above-label" style="width: 109%;" />
+                                    </div>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="teste2">
+                            <header>
+                                <h1 style="font-size: 28px;">Contratar</h1>
+                            </header>
+                            <group class="pagina">
+                            <group class="o_half_width_group">
+                                <div class="form_field">
+                                    <label for="email_pessoal" string="E-mail Pessoal"/>
+                                    <field name="email_pessoal" string="E-mail Pessoal" placeholder="exemplo@dominio.com" class="field-above-label"/>
+                                </div>
+                                <div class="form_field">
+                                    <label for="telefone" string="Telefone"/>
+                                    <field name="telefone" string="Telefone" placeholder="(11) 99999-9999" class="field-above-label"/>
+                                </div>
+                            </group>
+                            <group class="o_half_width_group">
+                                <div class="form_field">
+                                    <label for="logradouro" string="Logradouro"/>
+                                    <field name="logradouro" string="Logradouro" class="field-above-label"/>
+                                </div>
+                                <div class="form_field">
+                                    <label for="numero" string="Número"/>
+                                    <field name="numero" string="Número" class="field-above-label"/>
+                                </div>
+                            </group>
+                            <group class="o_half_width_group">
+                                <div class="form_field form_field_bottom">
+                                    <label for="complemento" string="Complemento"/>
+                                    <field name="complemento" string="Complemento" class="field-above-label"/>
+                                </div>
+                                <div class="form_field form_field_bottom">
+                                    <label for="bairro" string="Bairro"/>
+                                    <field name="bairro" string="Bairro" class="field-above-label"/>
+                                </div>
+                                <div class="form_field form_field_bottom">
+                                    <label for="cidade" string="Cidade"/>
+                                    <field name="cidade" string="Cidade" class="field-above-label"/>
+                                </div>
+                                <div class="form_field form_field_bottom">
+                                    <label for="estado" string="Estado"/>
+                                    <field name="estado" string="Estado" class="field-above-label"/>
+                                </div>
+                                <div class="form_field form_field_bottom">
+                                    <label for="cep" string="CEP"/>
+                                    <field name="cep" string="CEP" placeholder="00000-000" class="field-above-label"/>
+                                </div>
+                            </group>
+                        </group>
+                    </page>
+                </notebook>
+            </sheet>
+            <footer>
+                <button string="Avançar" type="object" class="btn-primary" name="action_next_step"/>
+            </footer>
+        </form>
+    </field>
+</record>
+
+
+
+
+
+<!-- Ação para a primeira tela: Listar e Criar Notas -->
+<record id="action_user_acess" model="ir.actions.act_window">
+    <field name="name">Usuários (criar e editar)</field>
+    <field name="res_model">res.users</field>
+    <field name="view_mode">tree,form</field>
+    <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('view_users_tree')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('view_step_1')})]"/>
+    <field name="help" type="html">
+        <p>Veja e crie novas Notas Fiscais.</p>
+    </field>
+</record>
+
+
+<!-- Ação para abrir o formulário -->
+<record id="action_user_access_form" model="ir.actions.act_window">
+    <field name="name">Criar Usuário</field>
+    <field name="res_model">res.users</field>
+    <field name="view_mode">form</field>
+    <field name="view_id" ref="view_step_1"/>
+    <field name="target">new</field>
+</record>
+
+
+
+<!-- Menu para o gerenciamento de acessos -->
+<menuitem id="menu_user_access_root" name="Gestão de Usuários" sequence="10"/>
+
+<!-- Submenu para criar usuários -->
+<menuitem id="menu_create_user" parent="menu_user_access_root" name="Criar Usuário" action="action_user_acess" sequence="10"/>
+
+
+
+</odoo>

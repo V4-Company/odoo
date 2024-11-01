@@ -1,0 +1,8 @@
+<odoo>
+    <!-- Herdando a view do editor de formulários do website -->
+    <template id="website_form_inherit" inherit_id="website_form.form_customization">
+        <xpath expr="//select[@id='action']" position="inside">
+            <option value="nf_emission">Criar Nota Fiscal</option>
+        </xpath>
+    </template>
+</odoo>

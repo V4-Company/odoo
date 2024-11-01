@@ -1,0 +1,238 @@
+<odoo>
+    <template id="nf_emission_create_form" name="Formulário de Criação de Nota Fiscal">
+        <t t-call="website.layout">
+            <div class="container">
+                <h1>Criar Nota Fiscal</h1>
+                <form action="/nota-fiscal/create" method="post" enctype="multipart/form-data">
+                    <!-- Adiciona o token CSRF manualmente -->
+                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+
+                    <!-- Campo para selecionar o usuário -->
+                    <div class="form-group">
+                        <label for="user_id">Usuário</label>
+                        <select name="user_id" class="form-control" required="required">
+                            <option value="">Selecione um usuário</option>
+                            <t t-foreach="users" t-as="user">
+                                <option t-att-value="user.id">
+                                    <t t-esc="user.name"/>
+                                </option>
+                            </t>
+                        </select>
+                    </div>
+
+                    <!-- Campo para o valor da nota fiscal -->
+                    <div class="form-group">
+                        <label for="valor_nf">Valor da Nota Fiscal</label>
+                        <input type="number" name="valor_nf" class="form-control" required="required" step="0.01"/>
+                    </div>
+
+                    <!-- Campo para o mês de referência -->
+                    <div class="form-group">
+                        <label for="mes_ref">Mês de Referência</label>
+                        <input type="date" name="mes_ref" class="form-control" required="required"/>
+                    </div>
+
+                    <!-- Campo para descrição -->
+                    <div class="form-group">
+                        <label for="description">Descrição</label>
+                        <textarea name="description" class="form-control"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Criar Nota Fiscal</button>
+                </form>
+            </div>
+        </t>
+    </template>
+
+
+    <template id="nf_emission_list_with_button" name="Lista de Notas Fiscais com Botões">
+        <t t-call="website.layout">
+            <t t-set="jquery_js" t-value="'https://code.jquery.com/jquery-3.6.0.min.js'"/>
+            <t t-set="bootstrap_js" t-value="'https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js'"/>
+            <t t-set="fontawesome_js" t-value="'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js'"/>
+    
+            <script t-att-src="jquery_js"></script>
+            <script t-att-src="bootstrap_js"></script>
+            <script t-att-src="fontawesome_js"></script>
+    
+            <div class="container">
+                <h1>Lista de Notas Fiscais</h1>
+    
+                <h3>Nota Fiscal Mais Recente</h3>
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Mês</th>
+                            <th>Remuneração</th>
+                            <th>Bônus</th>
+                            <th>Desconto</th>
+                            <th>Valor da nota</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-if="records and records[0]">
+                            <tr>
+                                <td><t t-esc="records[0]['mes_ref']"/></td>
+                                <td><t t-esc="records[0]['valor_nf']"/></td>
+                                <td><t t-esc="records[0]['bonus']"/></td>
+                                <td><t t-esc="records[0]['desconto']"/></td>
+                                <td><t t-esc="records[0]['valor_total']"/></td>
+                                <td>
+                                    <t t-if="records[0]['state'] == 'draft'">Não Emitido</t>
+                                    <t t-if="records[0]['state'] == 'done'">Emitido</t>
+                                </td>
+                                <td>
+                                    <t t-if="records[0]['state'] == 'draft'">
+                                        <button type="button" class="btn btn-primary" 
+                                                data-toggle="modal" 
+                                                t-att-data-target="'#uploadModal_' + str(records[0]['id'])">
+                                            Anexar Nota Fiscal
+                                        </button>
+                                    </t>
+                                    <t t-if="records[0]['state'] != 'draft'">
+                                        <a class="btn btn-danger disabled">Nota Fiscal Já Enviada</a>
+                                    </t>
+                                </td>
+                            </tr>
+    
+                            <div class="modal fade" t-att-id="'uploadModal_' + str(records[0]['id'])" tabindex="-1">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">
+                                                Anexar Nota Fiscal - <t t-esc="records[0]['user_id']"/>
+                                            </h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">x</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <t t-if="error">
+                                                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                                    <t t-raw="error"/>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                                </div>
+                                            </t>
+                                            <form t-att-action="'/nota-fiscal/attach/' + str(records[0]['id']) + '/submit'" 
+                                                  method="post" enctype="multipart/form-data">
+                                                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                                <div class="form-group">
+                                                    <label for="nf_file">Anexar Nota Fiscal (PDF)</label>
+                                                    <input type="file" name="nf_file" class="form-control" required="required"/>
+                                                </div>
+                                                <button type="submit" class="btn btn-primary">Enviar Nota Fiscal</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                        <t t-if="not records or not records[0]">
+                            <tr>
+                                <td colspan="7" class="text-center">Nenhuma nota fiscal encontrada</td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+    
+                <h3>Outras Notas Fiscais</h3>
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Mês</th>
+                            <th>Remuneração</th>
+                            <th>Bônus</th>
+                            <th>Desconto</th>
+                            <th>Valor da nota</th>
+                            <th>Status</th>
+                            <th class="text-center" style="width: 50px;"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-if="records and len(records) > 1">
+                            <t t-foreach="records[1:]" t-as="rec">
+                                <tr>
+                                    <td><t t-esc="rec['mes_ref']"/></td>
+                                    <td><t t-esc="rec['valor_nf']"/></td>
+                                    <td><t t-esc="rec['bonus']"/></td>
+                                    <td><t t-esc="rec['desconto']"/></td>
+                                    <td><t t-esc="rec['valor_total']"/></td>
+                                    <td>
+                                        <t t-if="rec['state'] == 'draft'">Não Emitido</t>
+                                        <t t-if="rec['state'] == 'done'">Emitido</t>
+                                    </td>
+                                    <td class="text-center" style="width: 40px;">
+                                        <i class="fas fa-file-alt" tabindex="0" data-toggle="popover" 
+                                           t-att-title="'Descrição'" 
+                                           t-att-data-content="rec['description'] or 'Sem descrição'"></i>
+                                    </td>
+                                </tr>
+                            </t>
+                        </t>
+                        <t t-if="not records or len(records) == 1">
+                            <tr>
+                                <td colspan="7" class="text-center">Nenhuma nota fiscal encontrada</td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+    
+                <script>
+                    $(document).ready(function() {
+                        $('[data-toggle="popover"]').popover({
+                            trigger: 'focus',
+                            placement: 'top'
+                        });
+    
+                        $('.btn-primary').on('click', function() {
+                            var target = $(this).attr('data-target');
+                            $(target).modal('show');
+                        });
+    
+                        var errorMessage = "<t t-esc='error'/>";
+                        if (errorMessage !== "") {
+                            var modalId = "#uploadModal_" + "<t t-esc="records[0]['id']"/>";
+                            $(modalId + ' .alert').alert();
+                            $(modalId).modal('show');
+                        }
+                    });
+                </script>
+            </div>
+        </t>
+    </template>
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+
+
+    <!-- Template para sucesso -->
+    <template id="nf_emission_success" name="Emissão de Nota Fiscal - Sucesso">
+        <t t-call="website.layout">
+        <div class="container">
+            <h2>Nota Fiscal enviada com sucesso!</h2>
+            <p>Agradecemos o envio da Nota Fiscal.</p>
+        </div>
+    </t>
+    </template>
+
+    <!-- Template para erro -->
+    <template id="nf_emission_error" name="Emissão de Nota Fiscal - Erro">
+        <div class="container">
+            <h2>Erro ao enviar a Nota Fiscal</h2>
+            <p>Ocorreu um erro durante o envio. Tente novamente mais tarde.</p>
+        </div>
+    </template>
+</odoo>
